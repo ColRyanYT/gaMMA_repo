@@ -9,7 +9,6 @@ var dash_velocity = Vector2(0,0)
 
 func _physics_process(_delta: float) -> void:
 	# Get the input direction and handle the movement/deceleration.
-	velocity = Vector2(0, 0)
 	var speed_boost = 1
 	mouse_position = get_global_mouse_position()
 	var direction = (mouse_position - position).normalized()
@@ -23,9 +22,11 @@ func _physics_process(_delta: float) -> void:
 		$Sprite/DashEffect.look_at(mouse_position)
 	elif dashing:
 		velocity = dash_velocity
-		
 	elif Input.is_action_pressed("forward"):
 		velocity = (direction * SPEED)
+	else:
+		velocity.x = move_toward(velocity.x, 0, SPEED)
+		velocity.y = move_toward(velocity.x, 0, SPEED)
 
 
 	var collision = move_and_slide()
@@ -40,7 +41,6 @@ func _on_dash_timer_timeout() -> void:
 
 
 func _on_enemy_body_entered(body: Node2D) -> void:
-	print("entered")
 	if dashing:
 		dash_velocity = -dash_velocity
 		$Sprite/DashEffect.rotate(deg_to_rad(180))
