@@ -1,0 +1,38 @@
+[gd_scene load_steps=7 format=3 uid="uid://bh6aqa6dc6ati"]
+
+[ext_resource type="Texture2D" uid="uid://b6rd7xpejcckl" path="res://Actors/placeholder_player.png" id="1_sor1j"]
+[ext_resource type="Script" uid="uid://dvlw6r6y82oqq" path="res://Actors/player.gd" id="1_y2lmi"]
+[ext_resource type="Texture2D" uid="uid://dour020i721oa" path="res://Actors/placeholder_dash.png" id="3_xk7p5"]
+[ext_resource type="Script" uid="uid://c16r2yjxh8uvr" path="res://Actors/dash_effect.gd" id="4_xmrs8"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_xmrs8"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_xk7p5")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_y2lmi"]
+size = Vector2(31, 32)
+
+[node name="Player" type="CharacterBody2D"]
+script = ExtResource("1_y2lmi")
+
+[node name="PlaceholderPlayer" type="Sprite2D" parent="."]
+texture = ExtResource("1_sor1j")
+
+[node name="DashEffect" type="AnimatedSprite2D" parent="PlaceholderPlayer"]
+z_index = -1
+position = Vector2(-20, 0)
+sprite_frames = SubResource("SpriteFrames_xmrs8")
+script = ExtResource("4_xmrs8")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-0.5, 0)
+shape = SubResource("RectangleShape2D_y2lmi")
+
+[connection signal="dash" from="." to="PlaceholderPlayer/DashEffect" method="_on_player_dash"]
