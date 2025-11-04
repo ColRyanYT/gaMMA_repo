@@ -3,6 +3,7 @@ extends Node
 @onready var camera = $Camera2D
 @onready var player = $Player
 @onready var tile_map = $TileMapLayer
+@onready var enemies = $Enemies
 
 @export var follow_speed = 4.0
 
@@ -13,6 +14,10 @@ var num_rooms = 40
 var tile_array = []
 
 var grid_size = 64
+
+## NOTE: THE TILES ARE 50 BY 50 PIXELS
+
+var centers = []
 
 var tile_codes = {
 	"floor": 0,
@@ -90,6 +95,8 @@ func set_tile_values() -> void:
 				if tile_array[room.grid_coords_array[j][k][0]][room.grid_coords_array[j][k][1]] == tile_codes.wall:
 					tile_array[room.grid_coords_array[j][k][0]][room.grid_coords_array[j][k][1]] = tile_codes.floor
 	
+	centers = room_centers
+	
 	place_tiles()
 	
 	var player_start = find_nearest_floor(int(grid_size / 2.0), int(grid_size / 2.0))
@@ -153,13 +160,13 @@ func find_nearest_floor(cx: int, cy: int) -> Vector2i:
 		radius += 1
 	return Vector2i.ZERO
 
-func connect_rooms(centers: Array) -> void:
-	if centers.size() < 2:
+func connect_rooms(room_centers: Array) -> void:
+	if room_centers.size() < 2:
 		return
 
-	for i in range(centers.size() - 1):
-		var a = centers[i]
-		var b = centers[i + 1]
+	for i in range(room_centers.size() - 1):
+		var a = room_centers[i]
+		var b = room_centers[i + 1]
 
 		var pos = a
 		var goal = b
@@ -196,17 +203,40 @@ func connect_rooms(centers: Array) -> void:
 				elif pos.x > goal.x:
 					pos.x -= 1
 
+## BACK TO MY CODE
+func spawn_enemies() -> void:
+	for i in centers:
+		var enemy_scene = preload("res://Actors/enemy.tscn")
+		var enemy_instance = enemy_scene.instantiate()
+		enemies.add_child(enemy_instance)
+		enemy_instance.player = player
+		enemy_instance.position.x = 50 * i.x
+		enemy_instance.position.y = 50 * i.y
+
+func clear_enemies() -> void:
+	for i in enemies.get_children():
+		i.queue_free()
+
 func _ready() -> void:
 	rng.randomize()
 	setup_procgen()
+	spawn_enemies()
 	
-	player.position.x = 10 * int(grid_size/2.0)
-	player.position.y = 10 * int(grid_size/2.0)
+	player.position.x = 50 * int(grid_size/2.0)
+	player.position.y = 50 * int(grid_size/2.0)
 
 func _input(_event):
 	if Input.is_key_pressed(KEY_SPACE):
+		clear_enemies()
 		tile_array.clear()
 		setup_procgen()
+		spawn_enemies()
+	
+	if Input.is_action_just_pressed("zoom"):
+		if camera.zoom == Vector2(2.0, 2.0):
+			camera.zoom = Vector2(0.3, 0.3)
+		else:
+			camera.zoom = Vector2(2.0, 2.0)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
