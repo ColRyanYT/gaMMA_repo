@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://d0q0618wb8n5y"]
+[gd_scene load_steps=4 format=3 uid="uid://b4iv241dnbb62"]
 
 [ext_resource type="Script" uid="uid://b5kfywyflks7c" path="res://Environment/proc_gen_new.gd" id="1_35ygo"]
 [ext_resource type="TileSet" uid="uid://k8infseuj8el" path="res://Environment/test_tileset.tres" id="1_36d10"]
@@ -15,3 +15,5 @@ tile_set = ExtResource("1_36d10")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 zoom = Vector2(2, 2)
+
+[node name="Enemies" type="Node2D" parent="."]
