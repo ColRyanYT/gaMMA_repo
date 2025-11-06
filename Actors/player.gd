@@ -1,4 +1,4 @@
-extends CharacterBody2D
+class_name Player extends CharacterBody2D
 
 @onready var hand = $Hand
 @onready var sprite = $Sprite
@@ -21,8 +21,14 @@ var dash_direction = Vector2.ZERO
 var my_weapon_scene: PackedScene
 var my_weapon: Weapon
 
+var max_health = 100
+var current_health = max_health
+
 var normal_texture = preload("res://Actors/armadillo.png")
 var ball_texture = preload("res://Actors/ball.png")
+
+func get_current_health():
+	return current_health
 
 # default weapon is claws for now
 func _ready() -> void:
@@ -77,11 +83,23 @@ func _process(_delta: float) -> void:
 	
 	if Input.is_action_just_pressed("shoot"):
 		my_weapon.fire()
+	
+	if current_health <= 0:
+		get_tree().paused = true
+		await get_tree().create_timer(1).timeout
+		get_tree().quit()
 
 func bounce(collision_data: KinematicCollision2D):
 	if collision_data:
 		dash_velocity = velocity.bounce(collision_data.get_normal())
 		$Sprite/DashEffect.set_rotation(dash_velocity.angle())
+		#var collided = collision_data.get_collider().get_parent()
+		#print(collided.get_class())
+		#if collided.is_class("Enemy"):
+			#current_health -= collided.get_damage()
+
+func take_damage(damage_value):
+	current_health -= damage_value
 
 func _on_enemy_body_entered(_body: Node2D) -> void:
 	pass
