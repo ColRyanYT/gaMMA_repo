@@ -45,7 +45,7 @@ func _physics_process(delta: float) -> void:
 	
 	dash_direction = self.global_position.direction_to(get_global_mouse_position())
 	
-	if Input.is_action_just_pressed("shift") and not dashing:
+	if Input.is_action_just_pressed("space") and not dashing:
 		start_dash(mouse_position)
 	elif dashing:
 		velocity = dash_velocity

@@ -226,7 +226,7 @@ func _ready() -> void:
 	player.position.y = 50 * int(grid_size/2.0)
 
 func _input(_event):
-	if Input.is_key_pressed(KEY_SPACE):
+	if Input.is_key_pressed(KEY_CTRL):
 		clear_enemies()
 		tile_array.clear()
 		setup_procgen()
