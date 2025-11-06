@@ -1,11 +1,22 @@
 extends CharacterBody2D
 
+@onready var hand = $Hand
+
 const SPEED = 200.0
 const JUMP_VELOCITY = -400.0
 signal dash
 var dashing: bool = false
 var mouse_position = null
 var dash_velocity = Vector2(0,0)
+
+var my_weapon_scene: PackedScene
+var my_weapon: Weapon
+
+# default weapon is claws for now
+func _ready() -> void:
+	my_weapon_scene = preload("res://Weapons/claws.tscn")
+	my_weapon = my_weapon_scene.instantiate()
+	hand.add_child(my_weapon)
 
 func _physics_process(delta: float) -> void:
 	# Get the input direction and handle the movement/deceleration.
@@ -16,7 +27,7 @@ func _physics_process(delta: float) -> void:
 	var direction_x := Input.get_axis("ui_left", "ui_right")
 	var direction_y := Input.get_axis("ui_up", "ui_down")
 	
-	if (Input.is_action_pressed("shift") or Input.is_action_just_pressed("shoot")) and not dashing:
+	if Input.is_action_pressed("shift"):
 		$Sprite.texture = load("res://Actors/ball.png")
 		dash.emit()
 		dashing = true
@@ -36,6 +47,11 @@ func _physics_process(delta: float) -> void:
 	var collision_data = move_and_collide(velocity * delta)
 	bounce(collision_data) 
 
+func _process(_delta: float) -> void:
+	hand.look_at(get_global_mouse_position())
+	
+	if Input.is_action_just_pressed("shoot"):
+		my_weapon.fire()
 
 func bounce(collision_data):
 	if collision_data:

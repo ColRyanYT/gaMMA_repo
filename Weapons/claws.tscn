@@ -1,0 +1,35 @@
+[gd_scene load_steps=4 format=3 uid="uid://d1o6yr6cfhxfy"]
+
+[ext_resource type="Script" uid="uid://ck8jwav5w455g" path="res://Weapons/claws.gd" id="1_6y3ht"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_iyf7g"]
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_iyf7g"]
+size = Vector2(20, 20)
+
+[node name="Claws" type="Node2D"]
+script = ExtResource("1_6y3ht")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+
+[node name="Area2D" type="Area2D" parent="."]
+position = Vector2(50.000004, 49.999996)
+scale = Vector2(5, 5)
+collision_layer = 0
+collision_mask = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(0, -10)
+shape = SubResource("RectangleShape2D_iyf7g")
+
+[node name="SlashAnim" type="Sprite2D" parent="Area2D"]
+visible = false
+position = Vector2(0, -10)
+texture = SubResource("PlaceholderTexture2D_iyf7g")
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 0.4
+one_shot = true
+
+[connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
