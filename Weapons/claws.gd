@@ -1,10 +1,7 @@
-class_name Claws extends Weapon
+class_name Claws extends MeleeWeapon
 
 @onready var anim = $Area2D/SlashAnim
 @onready var timer = $Timer
-@onready var hitbox = $Area2D
-
-var _damage = 40
 
 var anim_playing = false
 
@@ -13,9 +10,7 @@ var frozen_rotation = Vector3.ZERO
 
 func _ready() -> void:
 	hitbox.monitoring = false
-
-func get_damage() -> int:
-	return self._damage
+	self._damage = 40
 
 func fire():
 	hitbox.monitoring = true
@@ -35,6 +30,3 @@ func _on_timer_timeout() -> void:
 	anim.visible = false
 	anim_playing = false
 	hitbox.monitoring = false
-
-func _on_area_2d_body_entered(body: Node2D) -> void:
-	body.take_damage(self)

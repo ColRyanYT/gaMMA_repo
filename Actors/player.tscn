@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://bh6aqa6dc6ati"]
+[gd_scene load_steps=6 format=3 uid="uid://bh6aqa6dc6ati"]
 
 [ext_resource type="Script" uid="uid://dvlw6r6y82oqq" path="res://Actors/player.gd" id="1_y2lmi"]
 [ext_resource type="Texture2D" uid="uid://c532vpvhcpyym" path="res://Actors/armadillo.png" id="2_xmrs8"]
+[ext_resource type="PackedScene" uid="uid://b1fwmqdhm0mp4" path="res://Weapons/shell.tscn" id="3_xk7p5"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_xmrs8"]
 animations = [{
@@ -31,15 +32,14 @@ show_behind_parent = true
 sprite_frames = SubResource("SpriteFrames_xmrs8")
 offset = Vector2(-16, 0)
 
-[node name="DashTimer" type="Timer" parent="Sprite/DashEffect"]
-one_shot = true
-
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(-0.5, 0)
 shape = SubResource("RectangleShape2D_y2lmi")
 
 [node name="Hand" type="Node2D" parent="."]
 
+[node name="Shell" parent="." instance=ExtResource("3_xk7p5")]
+
 [connection signal="dash" from="." to="Sprite/DashEffect" method="_on_player_dash"]
-[connection signal="timeout" from="Sprite/DashEffect/DashTimer" to="." method="_on_dash_timer_timeout"]
-[connection signal="timeout" from="Sprite/DashEffect/DashTimer" to="Sprite/DashEffect" method="_on_dash_timer_timeout"]
+
+[editable path="Shell"]

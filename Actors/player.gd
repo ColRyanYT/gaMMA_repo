@@ -1,16 +1,28 @@
 extends CharacterBody2D
 
 @onready var hand = $Hand
+@onready var sprite = $Sprite
+@onready var dash_effect = $Sprite/DashEffect
+@onready var shell = $Shell
 
 const SPEED = 200.0
 const JUMP_VELOCITY = -400.0
+
+const DASH_MULTIPLIER = 3
+const DASH_TIME = 0.6
+
 signal dash
 var dashing: bool = false
-var mouse_position = null
 var dash_velocity = Vector2(0,0)
+
+var direction = Vector2.ZERO
+var dash_direction = Vector2.ZERO
 
 var my_weapon_scene: PackedScene
 var my_weapon: Weapon
+
+var normal_texture = preload("res://Actors/armadillo.png")
+var ball_texture = preload("res://Actors/ball.png")
 
 # default weapon is claws for now
 func _ready() -> void:
@@ -20,32 +32,45 @@ func _ready() -> void:
 
 func _physics_process(delta: float) -> void:
 	# Get the input direction and handle the movement/deceleration.
-	var speed_boost = 1
-	mouse_position = get_global_mouse_position()
-	var direction = (mouse_position - position).normalized()
+	var mouse_position = get_global_mouse_position()
+	var direction_x = Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left")
+	var direction_y = Input.get_action_strength("ui_down") - Input.get_action_strength("ui_up")
+	direction = Vector2(direction_x, direction_y).normalized()
 	
-	var direction_x := Input.get_axis("ui_left", "ui_right")
-	var direction_y := Input.get_axis("ui_up", "ui_down")
+	dash_direction = self.global_position.direction_to(get_global_mouse_position())
 	
-	if Input.is_action_pressed("shift"):
-		$Sprite.texture = load("res://Actors/ball.png")
-		dash.emit()
-		dashing = true
-		speed_boost = 3
-		velocity = (direction * SPEED * speed_boost)
-		dash_velocity = velocity
-		$Sprite/DashEffect.look_at(mouse_position)
+	if Input.is_action_just_pressed("shift") and not dashing:
+		start_dash(mouse_position)
 	elif dashing:
 		velocity = dash_velocity
 	elif direction_x or direction_y:
-		velocity = (Vector2(direction_x, direction_y) * SPEED)
+		velocity = direction * SPEED
 	else:
 		velocity.x = move_toward(velocity.x, 0, SPEED)
 		velocity.y = move_toward(velocity.y, 0, SPEED)
 
-
 	var collision_data = move_and_collide(velocity * delta)
 	bounce(collision_data) 
+	
+
+func start_dash(mouse_position: Vector2) -> void:
+	dashing = true
+	sprite.texture = ball_texture
+	dash.emit()
+
+	dash_velocity = dash_direction * SPEED * DASH_MULTIPLIER
+	dash_effect.look_at(mouse_position)
+	
+	shell.fire()
+	# Use a coroutine to end dash after DASH_TIME seconds
+	await get_tree().create_timer(DASH_TIME).timeout
+	end_dash()
+
+
+func end_dash() -> void:
+	dashing = false
+	sprite.texture = normal_texture
+	shell.stop_firing()
 
 func _process(_delta: float) -> void:
 	hand.look_at(get_global_mouse_position())
@@ -53,17 +78,11 @@ func _process(_delta: float) -> void:
 	if Input.is_action_just_pressed("shoot"):
 		my_weapon.fire()
 
-func bounce(collision_data):
+func bounce(collision_data: KinematicCollision2D):
 	if collision_data:
 		dash_velocity = velocity.bounce(collision_data.get_normal())
-		print(velocity)
 		$Sprite/DashEffect.set_rotation(dash_velocity.angle())
-	
 
-func _on_dash_timer_timeout() -> void:
-	dashing = false
-
-
-func _on_enemy_body_entered(body: Node2D) -> void:
+func _on_enemy_body_entered(_body: Node2D) -> void:
 	pass
 	
