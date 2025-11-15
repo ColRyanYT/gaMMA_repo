@@ -1,8 +1,11 @@
-[gd_scene load_steps=7 format=3 uid="uid://d36qdo072i8wi"]
+[gd_scene load_steps=9 format=3 uid="uid://d36qdo072i8wi"]
 
-[ext_resource type="Script" uid="uid://cca41hjoiim7x" path="res://Actors/enemy.gd" id="1_pgd2a"]
+[ext_resource type="Script" uid="uid://em1of80lwx01" path="res://Actors/EnemyBobcat.gd" id="1_gl316"]
 [ext_resource type="Texture2D" uid="uid://1om6mtswn1ij" path="res://Actors/bobcat.png" id="2_rracr"]
-[ext_resource type="Texture2D" uid="uid://c571deydu3j4e" path="res://Actors/bobcat_flipped.png" id="3_fd1gt"]
+[ext_resource type="PackedScene" uid="uid://c5fga6uwln3sq" path="res://Actors/blood.tscn" id="3_gl316"]
+[ext_resource type="Texture2D" uid="uid://dca473d2581py" path="res://Actors/evil_bobcat.png" id="3_ln8fe"]
+[ext_resource type="Texture2D" uid="uid://c3q2h0oc8pjhi" path="res://Actors/evil_bobcat_flipped.png" id="4_gl316"]
+[ext_resource type="PackedScene" uid="uid://b00pmxoktnwd5" path="res://Actors/damage_area.tscn" id="6_o4let"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_vk3ic"]
 radius = 20.0
@@ -11,26 +14,23 @@ radius = 20.0
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("2_rracr")
+"texture": ExtResource("3_ln8fe")
 }, {
 "duration": 1.0,
-"texture": ExtResource("3_fd1gt")
+"texture": ExtResource("4_gl316")
 }],
 "loop": true,
 "name": &"walk",
 "speed": 5.0
 }]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_fd1gt"]
-radius = 22.0
-
-[node name="Enemy" type="CharacterBody2D"]
-scale = Vector2(2, 2)
-collision_layer = 6
+[node name="BobcatEnemy" type="CharacterBody2D"]
+scale = Vector2(1.5, 1.5)
+collision_layer = 4
 collision_mask = 3
 motion_mode = 1
 wall_min_slide_angle = 0.0
-script = ExtResource("1_pgd2a")
+script = ExtResource("1_gl316")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_vk3ic")
@@ -46,35 +46,17 @@ debug_enabled = true
 wait_time = 0.5
 autostart = true
 
-[node name="CPUParticles2D" type="CPUParticles2D" parent="."]
-show_behind_parent = true
-emitting = false
-amount = 10
-lifetime = 0.2
-one_shot = true
-explosiveness = 1.0
-emission_shape = 1
-emission_sphere_radius = 0.01
-direction = Vector2(0, 0)
-spread = 180.0
-gravity = Vector2(0, 0)
-initial_velocity_min = 154.49
-initial_velocity_max = 298.81
-scale_amount_min = 6.0
-scale_amount_max = 11.0
-color = Color(0.38604364, 0, 0.040072918, 1)
+[node name="Blood" parent="." instance=ExtResource("3_gl316")]
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_ln8fe")
 animation = &"walk"
 speed_scale = 0.4
 
-[node name="DamageArea" type="Area2D" parent="."]
-collision_layer = 0
-collision_mask = 2
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="DamageArea"]
-shape = SubResource("CircleShape2D_fd1gt")
+[node name="DamageArea" parent="." instance=ExtResource("6_o4let")]
 
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
 [connection signal="body_entered" from="DamageArea" to="." method="_on_damage_area_body_entered"]
+
+[editable path="Blood"]
+[editable path="DamageArea"]

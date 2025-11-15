@@ -1,0 +1,48 @@
+[gd_scene load_steps=5 format=3 uid="uid://ski4liphcq8x"]
+
+[ext_resource type="Texture2D" uid="uid://bngw3ec2g3530" path="res://Weapons/bullet.png" id="1_cv5v3"]
+[ext_resource type="Script" uid="uid://ojeut27nrwb7" path="res://Weapons/bullet.gd" id="1_nx4t3"]
+[ext_resource type="PackedScene" uid="uid://b00pmxoktnwd5" path="res://Actors/damage_area.tscn" id="3_jxno6"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_ss85g"]
+radius = 11.156055
+
+[node name="Bullet" type="RigidBody2D"]
+collision_layer = 0
+collision_mask = 3
+gravity_scale = 0.0
+contact_monitor = true
+max_contacts_reported = 1
+script = ExtResource("1_nx4t3")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0.029167175, -0.058336258)
+shape = SubResource("CircleShape2D_ss85g")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+z_index = 1
+position = Vector2(0.61253166, -0.4666891)
+rotation = 1.5707964
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("1_cv5v3")
+
+[node name="DamageArea" parent="." instance=ExtResource("3_jxno6")]
+scale = Vector2(0.5, 0.5)
+
+[node name="CPUParticles2D" type="CPUParticles2D" parent="."]
+direction = Vector2(-1, 0)
+spread = 5.1
+gravity = Vector2(0, 0)
+initial_velocity_min = 50.0
+initial_velocity_max = 50.0
+scale_amount_min = 5.0
+scale_amount_max = 10.0
+color = Color(0.9257615, 0.17660165, 0.33693564, 1)
+
+[node name="Lifetime" type="Timer" parent="."]
+wait_time = 20.0
+
+[connection signal="body_entered" from="DamageArea" to="." method="_on_damage_area_body_entered"]
+[connection signal="timeout" from="Lifetime" to="." method="_on_lifetime_timeout"]
+
+[editable path="DamageArea"]

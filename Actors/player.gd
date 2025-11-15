@@ -51,12 +51,17 @@ func _physics_process(delta: float) -> void:
 		velocity = dash_velocity
 	elif direction_x or direction_y:
 		velocity = direction * SPEED
+		move_and_slide()
 	else:
+		move_and_slide()
 		velocity.x = move_toward(velocity.x, 0, SPEED)
 		velocity.y = move_toward(velocity.y, 0, SPEED)
-
-	var collision_data = move_and_collide(velocity * delta)
-	bounce(collision_data) 
+		
+		
+	
+	if dashing:
+		var collision_data = move_and_collide(velocity * delta)
+		bounce(collision_data) 
 	
 
 func start_dash(mouse_position: Vector2) -> void:

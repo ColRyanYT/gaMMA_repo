@@ -206,7 +206,9 @@ func connect_rooms(room_centers: Array) -> void:
 ## BACK TO MY CODE
 func spawn_enemies() -> void:
 	for i in centers:
-		var enemy_scene = preload("res://Actors/enemy.tscn")
+		var enemy_scene = preload("res://Actors/Enemy.tscn")
+		if rng.randi_range(0,1) == 1:
+			enemy_scene = preload("res://Actors/shotgun_enemy.tscn")
 		var enemy_instance = enemy_scene.instantiate()
 		enemies.add_child(enemy_instance)
 		enemy_instance.player = player

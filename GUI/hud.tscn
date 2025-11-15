@@ -1,6 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://cd206p4tf2gbl"]
+[gd_scene load_steps=5 format=3 uid="uid://cd206p4tf2gbl"]
 
 [ext_resource type="Script" uid="uid://bg4s8x7a7rq5o" path="res://GUI/hud.gd" id="1_15n47"]
+[ext_resource type="Texture2D" uid="uid://ca0aatyt58s43" path="res://icon.svg" id="2_36ch1"]
 
 [sub_resource type="Theme" id="Theme_15n47"]
 
@@ -22,3 +23,17 @@ grow_vertical = 0
 theme = SubResource("Theme_15n47")
 theme_override_font_sizes/font_size = 55
 theme_override_styles/fill = SubResource("StyleBoxFlat_15n47")
+
+[node name="CurrentItem" type="TextureRect" parent="."]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -198.0
+offset_top = -188.0
+offset_right = -70.0
+offset_bottom = -60.0
+grow_horizontal = 0
+grow_vertical = 0
+texture = ExtResource("2_36ch1")

@@ -1,0 +1,37 @@
+[gd_scene load_steps=6 format=3 uid="uid://dxxvcdn7hshcf"]
+
+[ext_resource type="Script" uid="uid://da3l1kj5vmp17" path="res://Actors/shotgun_enemy.gd" id="1_kdha6"]
+[ext_resource type="PackedScene" uid="uid://c5fga6uwln3sq" path="res://Actors/blood.tscn" id="1_qficc"]
+[ext_resource type="Texture2D" uid="uid://bxcywh7v5ke48" path="res://Actors/ShotgunEnemy.png" id="1_t5e18"]
+[ext_resource type="PackedScene" uid="uid://b00pmxoktnwd5" path="res://Actors/damage_area.tscn" id="4_qyhah"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_kdha6"]
+size = Vector2(36, 40)
+
+[node name="ShotgunEnemy" type="CharacterBody2D"]
+scale = Vector2(1.5, 1.5)
+collision_layer = 4
+collision_mask = 3
+script = ExtResource("1_kdha6")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_t5e18")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_kdha6")
+
+[node name="Blood" parent="." instance=ExtResource("1_qficc")]
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 3.0
+
+[node name="DamageArea" parent="." instance=ExtResource("4_qyhah")]
+
+[node name="ShootTimer" type="Timer" parent="."]
+autostart = true
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
+[connection signal="body_entered" from="DamageArea" to="." method="_on_damage_area_body_entered"]
+[connection signal="timeout" from="ShootTimer" to="." method="_on_shoot_timer_timeout"]
+
+[editable path="DamageArea"]

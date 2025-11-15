@@ -11,10 +11,12 @@ var frozen_rotation = Vector3.ZERO
 func _ready() -> void:
 	hitbox.monitoring = false
 	self._damage = 40
+	timer.wait_time = 0.4 #anim.speed_scale 
 
 func fire():
 	hitbox.monitoring = true
 	anim_playing = true
+	anim.play("slash")
 	timer.start()
 	frozen_rotation = self.global_rotation
 	anim.visible = true
@@ -29,4 +31,5 @@ func _process(_delta: float) -> void:
 func _on_timer_timeout() -> void:
 	anim.visible = false
 	anim_playing = false
+	anim.stop()
 	hitbox.monitoring = false
