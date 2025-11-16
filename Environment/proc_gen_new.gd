@@ -4,8 +4,9 @@ extends Node
 @onready var player = $Player
 @onready var tile_map = $TileMapLayer
 @onready var enemies = $Enemies
+@onready var chest = preload("res://Environment/chest.tscn")
 
-@export var follow_speed = 4.0
+@onready var follow_speed = 4.0
 
 var rng = RandomNumberGenerator.new()
 
@@ -18,12 +19,14 @@ var grid_size = 64
 ## NOTE: THE TILES ARE 50 BY 50 PIXELS
 
 var centers = []
+var rooms_array = []
 
 var tile_codes = {
 	"floor": 0,
 	"wall": 1
 }
 
+var chest_sparsity = 5
 
 class Room:
 	var x_size: int
@@ -94,8 +97,11 @@ func set_tile_values() -> void:
 					continue
 				if tile_array[room.grid_coords_array[j][k][0]][room.grid_coords_array[j][k][1]] == tile_codes.wall:
 					tile_array[room.grid_coords_array[j][k][0]][room.grid_coords_array[j][k][1]] = tile_codes.floor
+		
+		rooms_array.append(room)
 	
 	centers = room_centers
+	
 	
 	place_tiles()
 	
@@ -215,6 +221,31 @@ func spawn_enemies() -> void:
 		enemy_instance.position.x = 50 * i.x
 		enemy_instance.position.y = 50 * i.y
 
+func spawn_chests():
+	var x_min
+	var x_max
+	var y_min
+	var y_max
+	var chest_pos_x
+	var chest_pos_y
+	var new_chest
+	for i in rooms_array:
+		if randi_range(0, chest_sparsity) == 0:
+			x_min = i.x_in_grid - i.x_size/2
+			x_max = i.x_in_grid + i.x_size/2
+			y_min = i.y_in_grid - i.y_size/2
+			y_max = i.y_in_grid + i.y_size/2
+			chest_pos_x = randi_range(x_min, x_max)
+			chest_pos_y = randi_range(y_min, y_max)
+			new_chest = chest.instantiate()
+			add_child(new_chest)
+			new_chest.global_position = Vector2(chest_pos_x * 50, chest_pos_y * 50)
+
+func clear_chests():
+	for i in get_children():
+		if i is Chest:
+			i.queue_free()
+
 func clear_enemies() -> void:
 	for i in enemies.get_children():
 		i.queue_free()
@@ -223,6 +254,7 @@ func _ready() -> void:
 	rng.randomize()
 	setup_procgen()
 	spawn_enemies()
+	spawn_chests()
 	
 	player.position.x = 50 * int(grid_size/2.0)
 	player.position.y = 50 * int(grid_size/2.0)
@@ -232,9 +264,11 @@ func _ready() -> void:
 func _input(_event):
 	if Input.is_key_pressed(KEY_CTRL):
 		clear_enemies()
+		clear_chests()
 		tile_array.clear()
 		setup_procgen()
 		spawn_enemies()
+		spawn_chests()
 	
 	if Input.is_action_just_pressed("zoom"):
 		if camera.zoom == Vector2(2.0, 2.0):

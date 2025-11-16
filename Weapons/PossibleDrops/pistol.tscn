@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://dorobjkj0sh0u"]
+
+[ext_resource type="Script" uid="uid://7x87ab5g2wt0" path="res://Weapons/pistol.gd" id="1_ybbri"]
+[ext_resource type="Texture2D" uid="uid://btqmibmqx1wy" path="res://Weapons/pistol.png" id="2_q8d5j"]
+
+[node name="Pistol" type="Node2D"]
+script = ExtResource("1_ybbri")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(12, -4)
+texture = ExtResource("2_q8d5j")
+
+[node name="shot_timer" type="Timer" parent="."]
+
+[node name="Muzzle" type="Node2D" parent="."]
+position = Vector2(32, -8)

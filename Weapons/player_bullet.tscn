@@ -1,6 +1,9 @@
-[gd_scene format=3 uid="uid://bx6hjurt1hjw7"]
+[gd_scene load_steps=2 format=3 uid="uid://bx6hjurt1hjw7"]
+
+[ext_resource type="Script" uid="uid://bs8najrekyclw" path="res://Weapons/player_bullet.gd" id="1_borst"]
 
 [node name="player_bullet" type="RigidBody2D"]
+script = ExtResource("1_borst")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 
