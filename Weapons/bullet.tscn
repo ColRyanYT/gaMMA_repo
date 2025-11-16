@@ -1,19 +1,19 @@
 [gd_scene load_steps=5 format=3 uid="uid://ski4liphcq8x"]
 
 [ext_resource type="Texture2D" uid="uid://bngw3ec2g3530" path="res://Weapons/bullet.png" id="1_cv5v3"]
-[ext_resource type="Script" uid="uid://ojeut27nrwb7" path="res://Weapons/bullet.gd" id="1_nx4t3"]
+[ext_resource type="Script" uid="uid://buh818kra17no" path="res://Weapons/enemy_bullet.gd" id="1_jxno6"]
 [ext_resource type="PackedScene" uid="uid://b00pmxoktnwd5" path="res://Actors/damage_area.tscn" id="3_jxno6"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_ss85g"]
 radius = 11.156055
 
-[node name="Bullet" type="RigidBody2D"]
+[node name="enemy_bullet" type="RigidBody2D"]
 collision_layer = 0
 collision_mask = 3
 gravity_scale = 0.0
 contact_monitor = true
 max_contacts_reported = 1
-script = ExtResource("1_nx4t3")
+script = ExtResource("1_jxno6")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0.029167175, -0.058336258)

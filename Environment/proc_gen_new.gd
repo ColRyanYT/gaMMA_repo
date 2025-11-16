@@ -226,6 +226,8 @@ func _ready() -> void:
 	
 	player.position.x = 50 * int(grid_size/2.0)
 	player.position.y = 50 * int(grid_size/2.0)
+	
+	Input.mouse_mode = Input.MOUSE_MODE_CONFINED_HIDDEN
 
 func _input(_event):
 	if Input.is_key_pressed(KEY_CTRL):
@@ -239,6 +241,9 @@ func _input(_event):
 			camera.zoom = Vector2(0.3, 0.3)
 		else:
 			camera.zoom = Vector2(2.0, 2.0)
+	
+	if Input.is_action_just_pressed("ui_cancel"):
+		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
