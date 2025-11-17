@@ -16,6 +16,8 @@ position = Vector2(12, -4)
 texture = ExtResource("2_5qc13")
 
 [node name="shot_timer" type="Timer" parent="."]
+wait_time = 0.4
+autostart = true
 
 [node name="Muzzle" type="Node2D" parent="."]
 position = Vector2(32, -8)
@@ -23,3 +25,5 @@ position = Vector2(32, -8)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(12.5, 0.5)
 shape = SubResource("RectangleShape2D_cbs3k")
+
+[connection signal="timeout" from="shot_timer" to="." method="_on_shot_timer_timeout"]

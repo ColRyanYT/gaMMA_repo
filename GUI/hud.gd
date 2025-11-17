@@ -6,4 +6,4 @@ extends CanvasLayer
 
 func _process(_delta: float) -> void:
 	health.value = player.get_current_health()
-	crosshair.global_position = get_viewport().get_mouse_position()
+	crosshair.global_position = get_viewport().get_mouse_position() - Vector2(40, 40)

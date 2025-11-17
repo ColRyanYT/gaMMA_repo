@@ -4,14 +4,22 @@ class_name Claws extends MeleeWeapon
 @onready var timer = $Timer
 
 var anim_playing = false
+var can_shoot = true
 
 var old_rotation = Vector3.ZERO
 var frozen_rotation = Vector3.ZERO
 
 func _ready() -> void:
 	hitbox.monitoring = false
-	self._damage = 40
+	self._damage = 20
 	timer.wait_time = 0.4 #anim.speed_scale 
+
+func try_fire():
+	if not can_shoot:
+		return
+
+	fire()
+	can_shoot = false
 
 func fire():
 	hitbox.monitoring = true
@@ -33,3 +41,7 @@ func _on_timer_timeout() -> void:
 	anim_playing = false
 	anim.stop()
 	hitbox.monitoring = false
+
+
+func _on_shot_timer_timeout() -> void:
+	can_shoot = true

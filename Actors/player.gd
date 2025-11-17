@@ -89,8 +89,8 @@ func end_dash() -> void:
 func _process(_delta: float) -> void:
 	hand.look_at(get_global_mouse_position())
 	
-	if Input.is_action_just_pressed("shoot"):
-		my_weapon.fire()
+	if Input.is_action_pressed("shoot"):
+		my_weapon.try_fire()
 	
 	if current_health <= 0:
 		get_tree().paused = true
@@ -108,8 +108,8 @@ func bounce(collision_data: KinematicCollision2D):
 		dash_velocity = velocity.bounce(collision_data.get_normal())
 		$Sprite/DashEffect.set_rotation(dash_velocity.angle())
 
-func take_damage(damage_value):
-	current_health -= damage_value
+func take_damage(obj):
+	current_health -= obj.get_damage()
 
 
 func _on_pickup_area_body_entered(body) -> void:

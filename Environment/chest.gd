@@ -1,6 +1,9 @@
 class_name Chest extends StaticBody2D
 
 var rng = RandomNumberGenerator.new()
+@onready var area = $Area2D
+
+var opened = false
 
 func _ready() -> void:
 	rng.randomize()
@@ -15,6 +18,10 @@ func spawn_in_item(path):
 
 func _on_area_2d_body_entered(body: Node2D) -> void:
 	if body is Player:
+		if opened:
+			area.monitoring = false
+			return
+		opened = true
 		var dir = DirAccess.open("res://Weapons/PossibleDrops/")
 		var files_array = []
 		if dir:

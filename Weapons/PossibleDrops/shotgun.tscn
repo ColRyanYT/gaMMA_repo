@@ -1,0 +1,28 @@
+[gd_scene load_steps=4 format=3 uid="uid://crdkdm0uyu54l"]
+
+[ext_resource type="Script" uid="uid://dpu2rkegglpc3" path="res://Weapons/shotgun.gd" id="1_j2ggr"]
+[ext_resource type="Texture2D" uid="uid://ctedlaurfhbna" path="res://Weapons/shotgun.png" id="1_u8ihj"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_j2ggr"]
+size = Vector2(70, 17)
+
+[node name="Shotgun" type="StaticBody2D"]
+collision_layer = 16
+collision_mask = 16
+script = ExtResource("1_j2ggr")
+
+[node name="shot_timer" type="Timer" parent="."]
+autostart = true
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(20, -3)
+texture = ExtResource("1_u8ihj")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(20, -1)
+shape = SubResource("RectangleShape2D_j2ggr")
+
+[node name="Muzzle" type="Node2D" parent="."]
+position = Vector2(53, -5)
+
+[connection signal="timeout" from="shot_timer" to="." method="_on_shot_timer_timeout"]

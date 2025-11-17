@@ -26,6 +26,10 @@ func _physics_process(delta: float) -> void:
 
 func _process(_delta: float) -> void:
 	check_damage()
+	if player.global_position.x > global_position.x:
+		sprite.flip_h = false
+	else:
+		sprite.flip_h = true
 
 func _ready() -> void:
 	rng.randomize()
@@ -50,7 +54,7 @@ func shoot():
 	var newbullet = bullet.instantiate()
 	get_parent().add_child(newbullet)
 	newbullet.global_transform = global_transform
-	newbullet.shoot(player.global_position)
+	newbullet.shoot(player.global_position, 0)
 
 func _on_shoot_timer_timeout() -> void:
 	if player.global_position.distance_to(global_position) < 300:

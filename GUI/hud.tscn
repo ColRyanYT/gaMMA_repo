@@ -40,10 +40,8 @@ grow_vertical = 0
 texture = ExtResource("2_36ch1")
 
 [node name="Crosshair" type="TextureRect" parent="."]
-offset_left = -23.0
-offset_top = -22.0
-offset_right = 17.0
-offset_bottom = 18.0
+offset_right = 40.0
+offset_bottom = 40.0
 scale = Vector2(2, 2)
 pivot_offset = Vector2(19.96875, 20.25)
 size_flags_horizontal = 4
