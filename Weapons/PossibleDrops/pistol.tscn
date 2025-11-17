@@ -1,16 +1,25 @@
-[gd_scene load_steps=3 format=3 uid="uid://dorobjkj0sh0u"]
+[gd_scene load_steps=4 format=3 uid="uid://dorobjkj0sh0u"]
 
-[ext_resource type="Script" uid="uid://7x87ab5g2wt0" path="res://Weapons/pistol.gd" id="1_ybbri"]
-[ext_resource type="Texture2D" uid="uid://btqmibmqx1wy" path="res://Weapons/pistol.png" id="2_q8d5j"]
+[ext_resource type="Script" uid="uid://7x87ab5g2wt0" path="res://Weapons/pistol.gd" id="1_wingv"]
+[ext_resource type="Texture2D" uid="uid://btqmibmqx1wy" path="res://Weapons/pistol.png" id="2_5qc13"]
 
-[node name="Pistol" type="Node2D"]
-script = ExtResource("1_ybbri")
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_cbs3k"]
+size = Vector2(45, 27)
+
+[node name="Pistol" type="StaticBody2D"]
+collision_layer = 16
+collision_mask = 16
+script = ExtResource("1_wingv")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 position = Vector2(12, -4)
-texture = ExtResource("2_q8d5j")
+texture = ExtResource("2_5qc13")
 
 [node name="shot_timer" type="Timer" parent="."]
 
 [node name="Muzzle" type="Node2D" parent="."]
 position = Vector2(32, -8)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(12.5, 0.5)
+shape = SubResource("RectangleShape2D_cbs3k")

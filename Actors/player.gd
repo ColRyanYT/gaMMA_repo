@@ -4,6 +4,7 @@ class_name Player extends CharacterBody2D
 @onready var sprite = $Sprite
 @onready var dash_effect = $Sprite/DashEffect
 @onready var shell = $Shell
+@onready var pickup_area = $PickupArea
 
 const SPEED = 200.0
 const JUMP_VELOCITY = -400.0
@@ -19,13 +20,15 @@ var direction = Vector2.ZERO
 var dash_direction = Vector2.ZERO
 
 var my_weapon_scene: PackedScene
-var my_weapon: Weapon
+var my_weapon: Node2D
 
 var max_health = 100
 var current_health = max_health
 
 var normal_texture = preload("res://Actors/armadillo.png")
 var ball_texture = preload("res://Actors/ball.png")
+
+var item_player_can_pickup: Node2D
 
 func get_current_health():
 	return current_health
@@ -93,19 +96,29 @@ func _process(_delta: float) -> void:
 		get_tree().paused = true
 		await get_tree().create_timer(1).timeout
 		get_tree().quit()
+	
+	if Input.is_action_just_pressed("interact") and item_player_can_pickup:
+		hand.get_child(0).queue_free()
+		item_player_can_pickup.reparent(hand, false)
+		item_player_can_pickup.global_position = hand.global_position
+		my_weapon = item_player_can_pickup
 
 func bounce(collision_data: KinematicCollision2D):
 	if collision_data:
 		dash_velocity = velocity.bounce(collision_data.get_normal())
 		$Sprite/DashEffect.set_rotation(dash_velocity.angle())
-		#var collided = collision_data.get_collider().get_parent()
-		#print(collided.get_class())
-		#if collided.is_class("Enemy"):
-			#current_health -= collided.get_damage()
 
 func take_damage(damage_value):
 	current_health -= damage_value
 
-func _on_enemy_body_entered(_body: Node2D) -> void:
-	pass
-	
+
+func _on_pickup_area_body_entered(body) -> void:
+	if body is Weapon:
+		#print("Weapon found")
+		item_player_can_pickup = body
+
+func _on_pickup_area_body_exited(body) -> void:
+	# this is probably bugged because what happens if there are 
+	# multiple weapons on the same tile?
+	if body is Weapon:
+		item_player_can_pickup = null

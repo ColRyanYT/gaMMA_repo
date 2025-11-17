@@ -1,10 +1,31 @@
-[gd_scene load_steps=2 format=3 uid="uid://bx6hjurt1hjw7"]
+[gd_scene load_steps=5 format=3 uid="uid://bx6hjurt1hjw7"]
 
 [ext_resource type="Script" uid="uid://bs8najrekyclw" path="res://Weapons/player_bullet.gd" id="1_borst"]
+[ext_resource type="Texture2D" uid="uid://byrf86i4qdf81" path="res://Weapons/player_bullet.png" id="2_k8lgp"]
+[ext_resource type="PackedScene" uid="uid://bvn4rmdipaenw" path="res://Weapons/bullet_trail.tscn" id="3_ejk3s"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_ejk3s"]
+radius = 11.0
 
 [node name="player_bullet" type="RigidBody2D"]
+collision_layer = 0
+collision_mask = 5
+gravity_scale = 0.0
+contact_monitor = true
+max_contacts_reported = 1
 script = ExtResource("1_borst")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-2, 1)
+shape = SubResource("CircleShape2D_ejk3s")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
+rotation = 1.5707964
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("2_k8lgp")
+
+[node name="Lifetime" type="Timer" parent="."]
+wait_time = 20.0
+
+[node name="BulletTrail" parent="." instance=ExtResource("3_ejk3s")]
+color = Color(3.0322374e-06, 0.6253344, 0.31823468, 1)

@@ -1,8 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://ski4liphcq8x"]
+[gd_scene load_steps=6 format=3 uid="uid://ski4liphcq8x"]
 
 [ext_resource type="Texture2D" uid="uid://bngw3ec2g3530" path="res://Weapons/bullet.png" id="1_cv5v3"]
 [ext_resource type="Script" uid="uid://buh818kra17no" path="res://Weapons/enemy_bullet.gd" id="1_jxno6"]
 [ext_resource type="PackedScene" uid="uid://b00pmxoktnwd5" path="res://Actors/damage_area.tscn" id="3_jxno6"]
+[ext_resource type="PackedScene" uid="uid://bvn4rmdipaenw" path="res://Weapons/bullet_trail.tscn" id="4_2tgr0"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_ss85g"]
 radius = 11.156055
@@ -29,15 +30,7 @@ texture = ExtResource("1_cv5v3")
 [node name="DamageArea" parent="." instance=ExtResource("3_jxno6")]
 scale = Vector2(0.5, 0.5)
 
-[node name="CPUParticles2D" type="CPUParticles2D" parent="."]
-direction = Vector2(-1, 0)
-spread = 5.1
-gravity = Vector2(0, 0)
-initial_velocity_min = 50.0
-initial_velocity_max = 50.0
-scale_amount_min = 5.0
-scale_amount_max = 10.0
-color = Color(0.9257615, 0.17660165, 0.33693564, 1)
+[node name="BulletTrail" parent="." instance=ExtResource("4_2tgr0")]
 
 [node name="Lifetime" type="Timer" parent="."]
 wait_time = 20.0

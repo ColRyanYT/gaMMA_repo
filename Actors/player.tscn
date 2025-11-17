@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://bh6aqa6dc6ati"]
+[gd_scene load_steps=7 format=3 uid="uid://bh6aqa6dc6ati"]
 
 [ext_resource type="Script" uid="uid://dvlw6r6y82oqq" path="res://Actors/player.gd" id="1_y2lmi"]
 [ext_resource type="Texture2D" uid="uid://c532vpvhcpyym" path="res://Actors/armadillo.png" id="2_xmrs8"]
@@ -17,6 +17,9 @@ animations = [{
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_y2lmi"]
 size = Vector2(31, 32)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_xk7p5"]
+radius = 47.0
 
 [node name="Player" type="CharacterBody2D" groups=["Player"]]
 collision_layer = 2
@@ -44,6 +47,15 @@ shape = SubResource("RectangleShape2D_y2lmi")
 
 [node name="Shell" parent="." instance=ExtResource("3_xk7p5")]
 
+[node name="PickupArea" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 16
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PickupArea"]
+shape = SubResource("CircleShape2D_xk7p5")
+
 [connection signal="dash" from="." to="Sprite/DashEffect" method="_on_player_dash"]
+[connection signal="body_entered" from="PickupArea" to="." method="_on_pickup_area_body_entered"]
+[connection signal="body_exited" from="PickupArea" to="." method="_on_pickup_area_body_exited"]
 
 [editable path="Shell"]
